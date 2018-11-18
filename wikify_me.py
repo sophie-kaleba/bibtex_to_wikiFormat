@@ -1,5 +1,4 @@
 import fileinput
-import sys
 
 """
 friendly reminder that we are trying to parse this kind of bibtex reference (the number of lines can vary)
@@ -44,7 +43,6 @@ to get this kind of wikipedia reference
 """
 
 def parseAllThatShit(result):
-    i = 0
     for line in fileinput.input():
         if "@" in line:
             result = parseTypeOfRef(line, result)
