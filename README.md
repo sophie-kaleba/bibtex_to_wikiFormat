@@ -9,6 +9,7 @@ Quick and dirty script to wikify a bibtex entry (so it can be cited in a wikiped
 
 The excpected bibtex entry should look like that:
 
+```
 "@inproceedings{Eisl:2016:TRA:2972206.2972211,
  author = {Eisl, Josef and Grimmer, Matthias and Simon, Doug and W\"{u}rthinger, Thomas and M\"{o}ssenb\"{o}ck, Hanspeter},
  title = {Trace-based Register Allocation in a JIT Compiler},
@@ -27,6 +28,8 @@ The excpected bibtex entry should look like that:
  address = {New York, NY, USA},
  keywords = {Just-in-Time Compilation, Linear Scan, Register Allocation, Trace Compilation, Trace Register Allocation, Virtual Machines},
 }"
+
+```
 
 
 
