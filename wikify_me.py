@@ -1,4 +1,5 @@
 import fileinput
+import sys
 
 """
 friendly reminder that we are trying to parse this kind of bibtex reference (the number of lines can vary)
@@ -41,15 +42,17 @@ to get this kind of wikipedia reference
 }}
 
 """
-
 def parseAllThatShit(result):
+    i = 0
+    year=""
     for line in fileinput.input():
         if "@" in line:
             result = parseTypeOfRef(line, result)
         if "author" in line:
-            result = parseListOfAuthors(line, result)
+            (result, lastname) = parseListOfAuthors(line, result)
         else:
-            result = parseRegularLine(line, result)
+            (result,year) = parseRegularLine(line, result, year)
+    result += " | id = "+lastname+year
     return result
 
 def parseTypeOfRef(line, result):
@@ -60,30 +63,35 @@ def parseTypeOfRef(line, result):
     return result
 
 
-def parseRegularLine(line, result):
+def parseRegularLine(line, result, year):
     try:
         splitline = line.split(" = ")
         if len(splitline) == 2:
             result += " | "+splitline[0].strip()+" = "
+            if ("year" in splitline[0]):
+                year = splitline[1][1:-3]
             new = splitline[1].strip()[1:-2]
             result += new
     except IndexError:
         pass
-    return result
+    return (result, year)
 
+def getFirstLastName(authorsList):
+    return str(authorsList[0].split(",")[0])
 
 def parseListOfAuthors(authorsList, result):
-	arrOfAuth = authorsList.split(" = ")
-	arrOfAuth = arrOfAuth[1][1:-1].split(" and ")
-	i = 1 #index of author
-	for e in arrOfAuth :
-		name_first = e.split(",")
-		result += " | last"+str(i)+" = "
-		result += name_first[0].strip()
-		result += " | first"+str(i)+" = "
-		result += name_first[1].strip()
-		i+=1
-	return result
+    arrOfAuth = authorsList.split(" = ")
+    arrOfAuth = arrOfAuth[1][1:-1].split(" and ")
+    i = 1 #index of author
+    author_id = getFirstLastName(arrOfAuth)
+    for e in arrOfAuth :
+        name_first = e.split(",")
+        result += " | last"+str(i)+" = "
+        result += name_first[0].strip()
+        result += " | first"+str(i)+" = "
+        result += name_first[1].strip()
+        i+=1
+    return (result, author_id)
 
 if __name__ == '__main__':
     result = "{{ cite "
